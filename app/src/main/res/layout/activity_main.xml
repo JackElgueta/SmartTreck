@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -10,8 +11,120 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jack.smarttreck.MainActivity">
 
-    <TextView
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        app:srcCompat="@drawable/mapa"
+        android:id="@+id/ibMapa"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="34dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="27dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/perfil"
+        android:id="@+id/ibPerfil"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_alignTop="@+id/ibMapa"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Menú Principal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView8"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_above="@+id/ibPerfil"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="          Amigos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/ibAmigos"
+        android:layout_marginTop="19dp"
+        android:layout_alignRight="@+id/ibAmigos"
+        android:layout_alignEnd="@+id/ibAmigos"
+        android:layout_alignLeft="@+id/ibAmigos"
+        android:layout_alignStart="@+id/ibAmigos" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/amigos"
+        android:id="@+id/ibAmigos"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/textView4"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="           Perfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/ibPerfil"
+        android:layout_marginTop="14dp"
+        android:layout_alignRight="@+id/ibPerfil"
+        android:layout_alignEnd="@+id/ibPerfil"
+        android:layout_alignLeft="@+id/ibPerfil"
+        android:layout_alignStart="@+id/ibPerfil" />
+
+    <TextView
+        android:text="           Mapa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:elevation="0dp"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignLeft="@+id/ibMapa"
+        android:layout_alignStart="@+id/ibMapa" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/escala"
+        android:id="@+id/ibDesafio"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/mochia"
+        android:id="@+id/ibEquipamiento"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+
+    <TextView
+        android:text="    Equipamiento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/ibEquipamiento"
+        android:layout_alignRight="@+id/ibEquipamiento"
+        android:layout_alignEnd="@+id/ibEquipamiento"
+        android:layout_alignLeft="@+id/ibEquipamiento"
+        android:layout_alignStart="@+id/ibEquipamiento" />
+
+    <TextView
+        android:text="Nuevo Desafio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:layout_above="@+id/ibAmigos"
+        android:layout_alignLeft="@+id/ibDesafio"
+        android:layout_alignStart="@+id/ibDesafio"
+        android:layout_alignRight="@+id/ibDesafio"
+        android:layout_alignEnd="@+id/ibDesafio" />
 </RelativeLayout>
