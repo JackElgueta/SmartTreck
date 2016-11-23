@@ -10,4 +10,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jack.smarttreck.EquipamientoActivity">
 
+    <TextView
+        android:text="Registrar Equipamiento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView9"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView9"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:id="@+id/Zapatos" />
 </RelativeLayout>
