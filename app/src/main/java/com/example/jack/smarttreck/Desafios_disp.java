@@ -28,9 +28,9 @@ import cz.msebera.android.httpclient.Header;
 public class Desafios_disp extends AppCompatActivity {
 
     private ListView listView;
-    ArrayList imagen_ruta = new ArrayList();
+    ArrayList nombre = new ArrayList();
     ArrayList ruta = new ArrayList();
-    ArrayList team = new ArrayList();
+    ArrayList cantidadPersonas = new ArrayList();
 
 
     @Override
@@ -45,16 +45,16 @@ public class Desafios_disp extends AppCompatActivity {
     }
 
     private void descargar_desafios() {
-        imagen_ruta.clear();
+        nombre.clear();
         ruta.clear();
-        team.clear();
+        cantidadPersonas.clear();
 
         final ProgressDialog progressDialog = new ProgressDialog(Desafios_disp.this);
         progressDialog.setMessage("Cargando Datos...");
         progressDialog.show();
 
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("1826.34535", new AsyncHttpResponseHandler() {
+        client.get("http://itfactory.cl/smartTrekking/api/views/desafios", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 if(statusCode==200){
@@ -62,10 +62,12 @@ public class Desafios_disp extends AppCompatActivity {
                     try {
                         JSONArray jsonArray = new JSONArray(new String(responseBody));
                         for (int i=0;i<jsonArray.length();i++) {
-                            imagen_ruta.add(jsonArray.getJSONObject(i).getString("imagen_ruta"));
+                            nombre.add(jsonArray.getJSONObject(i).getString("node_title"));
                             ruta.add(jsonArray.getJSONObject(i).getString("ruta"));
-                            team.add(jsonArray.getJSONObject(i).getString("ruta"));
+                            cantidadPersonas.add(jsonArray.getJSONObject(i).getString("cantidad de personas"));
                         }
+
+
                         listView.setAdapter(new ImagenAdapter(getApplicationContext()));
 
                         }catch (JSONException e){
@@ -86,7 +88,7 @@ public class Desafios_disp extends AppCompatActivity {
         Context ctx;
         LayoutInflater layoutInflanter;
         SmartImageView smartImageView;
-        TextView tvRuta, tvTeam;
+        TextView tvRuta, tvCantidadPersonas, tvNombre;
 
         public ImagenAdapter(Context applicationContext) {
             this.ctx= applicationContext;
@@ -95,7 +97,7 @@ public class Desafios_disp extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return imagen_ruta.size();
+            return nombre.size();
         }
 
         @Override
@@ -113,18 +115,19 @@ public class Desafios_disp extends AppCompatActivity {
 
             ViewGroup viewGroup = (ViewGroup)layoutInflanter.inflate(R.layout.activity_desafios_disp_item,null);
 
-            smartImageView=(SmartImageView)viewGroup.findViewById(R.id.imagen_ruta);
+            //smartImageView=(SmartImageView)viewGroup.findViewById(R.id.imagen_ruta);
             tvRuta=(TextView)viewGroup.findViewById(R.id.ruta);
-            tvTeam=(TextView)viewGroup.findViewById(R.id.team);
+            tvCantidadPersonas=(TextView)viewGroup.findViewById(R.id.cantidadPersonas);
+            tvNombre=(TextView)viewGroup.findViewById(R.id.nombreDesafio);
 
             //para imagenes
-            String urlfinal ="http..."+imagen_ruta.get(position).toString();
-            Rect rect = new Rect(smartImageView.getLeft(), smartImageView.getTop(),smartImageView.getRight(),smartImageView.getBottom());
+            //String urlfinal ="http..."+n.get(position).toString();
+            //Rect rect = new Rect(smartImageView.getLeft(), smartImageView.getTop(),smartImageView.getRight(),smartImageView.getBottom());
 
-            smartImageView.setImageUrl(urlfinal,rect);
+            //smartImageView.setImageUrl(urlfinal,rect);
 
             tvRuta.setText(ruta.get(position).toString());
-            tvTeam.setText(team.get(position).toString());
+            tvCantidadPersonas.setText(cantidadPersonas.get(position).toString());
             return viewGroup;
         }
     }

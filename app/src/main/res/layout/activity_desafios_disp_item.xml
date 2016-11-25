@@ -8,15 +8,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <!--
         <com.github.snowdream.android.widget.SmartImageView
             android:id="@+id/imagen_ruta"
             android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_height="100dp" />-->
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/nombreDesafio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity=""
+                android:textAlignment="textEnd"
+                android:textSize="24dp"
+                android:textColor="#000"
+                />
             <TextView
                 android:id="@+id/ruta"
                 android:layout_width="wrap_content"
@@ -27,7 +38,7 @@
                 android:textColor="#000"
                 />
             <TextView
-                android:id="@+id/team"
+                android:id="@+id/cantidadPersonas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
