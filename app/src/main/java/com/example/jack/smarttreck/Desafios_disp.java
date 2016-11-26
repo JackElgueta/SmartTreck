@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class Desafios_disp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_desafios_disp);
+        setTitle("Unirse a un desafio");
         listView= (ListView) findViewById(R.id.lista_desafios);
         descargar_desafios();
 
@@ -63,6 +65,7 @@ public class Desafios_disp extends AppCompatActivity {
                         JSONArray jsonArray = new JSONArray(new String(responseBody));
                         for (int i=0;i<jsonArray.length();i++) {
                             nombre.add(jsonArray.getJSONObject(i).getString("node_title"));
+                            Log.d("nombre_desafio", jsonArray.getJSONObject(i).getString("node_title"));
                             ruta.add(jsonArray.getJSONObject(i).getString("ruta"));
                             cantidadPersonas.add(jsonArray.getJSONObject(i).getString("cantidad de personas"));
                         }
@@ -128,6 +131,8 @@ public class Desafios_disp extends AppCompatActivity {
 
             tvRuta.setText(ruta.get(position).toString());
             tvCantidadPersonas.setText(cantidadPersonas.get(position).toString());
+            tvNombre.setText(nombre.get(position).toString());
+
             return viewGroup;
         }
     }

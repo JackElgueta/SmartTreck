@@ -3,10 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <!--
         <com.github.snowdream.android.widget.SmartImageView
@@ -15,38 +11,36 @@
             android:layout_height="100dp" />-->
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
             <TextView
+                android:paddingTop="5dp"
                 android:id="@+id/nombreDesafio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity=""
-                android:textAlignment="textEnd"
-                android:textSize="24dp"
+                android:layout_gravity="left"
+                android:textSize="20dp"
                 android:textColor="#000"
                 />
             <TextView
                 android:id="@+id/ruta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:textAlignment="textEnd"
-                android:textSize="24dp"
-                android:textColor="#000"
+                android:layout_gravity="left"
+                android:textSize="14dp"
+                android:textColor="#787878"
                 />
+
             <TextView
                 android:id="@+id/cantidadPersonas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:paddingLeft="20dp"
+                android:layout_gravity="left"
                 android:textColor="#000"
+                android:paddingBottom="5dp"
                 />
-
-        </LinearLayout>
 
 
     </LinearLayout>

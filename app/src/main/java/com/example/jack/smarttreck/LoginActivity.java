@@ -34,6 +34,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -319,7 +322,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-    /* Creamos el objeto cliente */
+
+            /* Creamos el objeto cliente */
+            String token, sessid, session_name;
+            token = "";
+            sessid = "";
+            session_name = "";
             OkHttpClient client = new OkHttpClient();
 
     /* Armamos la estructura de la peticion con los valores tomados del form */
@@ -336,12 +344,30 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             try {
                 Response response = client.newCall(loginRequest).execute();
-                Log.d("response", response.body().string());
                 if(response.isSuccessful()){
-                    //String responseContent = response.body().string();
+                    String responseContent = response.body().string();
+
+                    try {
+                        JSONObject loginObject = new JSONObject(responseContent);
+
+                        token = loginObject.getString("token");
+                        sessid = loginObject.getString("sessid");
+                        session_name = loginObject.getString("session_name");
+                        Log.d("token_from_login", token);
+                        Log.d("sessid_from_login", sessid);
+                        Log.d("session_name_from_login", session_name);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-                    //goToMain.putExtra("session_data", responseContent);
+
+                    goToMain.putExtra("token", token);
+                    goToMain.putExtra("session_name", session_name);
+                    goToMain.putExtra("sessid", sessid);
+
+
                     startActivity(goToMain);
                 }
                 else{
