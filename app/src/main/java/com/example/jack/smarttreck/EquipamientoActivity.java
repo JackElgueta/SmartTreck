@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 
 public class EquipamientoActivity extends AppCompatActivity {
-
+    String token, sessid, session_name, fid_image, url_image, uid_user;
     private ListView listView;
     ArrayList equipo = new ArrayList();
 
@@ -37,9 +37,19 @@ public class EquipamientoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_equipamiento);
 
+        super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+
+        if(extras != null){
+            token = extras.getString("token");
+            sessid = extras.getString("sessid");
+            session_name = extras.getString("session_name");
+        }
+
+        setContentView(R.layout.activity_equipamiento);
+        setTitle("Mi equipamiento");
         displayListView();
         checkButtonClick();
 
@@ -47,25 +57,43 @@ public class EquipamientoActivity extends AppCompatActivity {
 
 
     private void displayListView() {
-        ArrayList<Equipo> equipoList = new ArrayList<Equipo>();
+        final ArrayList<Equipo> equipoList = new ArrayList<Equipo>();
+
+        final ProgressDialog progressDialog = new ProgressDialog(EquipamientoActivity.this);
+        progressDialog.setMessage("Cargando Equipamiento...");
+        progressDialog.show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("X-CSRF-Token", token);
+        client.addHeader("Cookie", session_name + "=" + sessid);
+
+        client.get("http://itfactory.cl/smartTrekking/api/views/equipamientos", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(statusCode==200){
+                    progressDialog.dismiss();
+                    try {
+                        JSONArray jsonArray = new JSONArray(new String(responseBody));
+                        for (int i=0;i<jsonArray.length();i++) {
+                            Equipo equipo = new Equipo(jsonArray.getJSONObject(i).getString("nid"), jsonArray.getJSONObject(i).getString("nombre_item"), false);
+                            equipoList.add(equipo);
+                        }
+                        //create an ArrayAdaptar from the String Array
+                        dataAdapter = new MyCustomAdapter(EquipamientoActivity.this, R.layout.lista_equipo, equipoList);
+                        listView = (ListView) findViewById(R.id.listView1);
+                        // Assign adapter to ListView
+                        listView.setAdapter(dataAdapter);
 
 
+                    }catch (JSONException e){
 
-        //create an ArrayAdaptar from the String Array
-        dataAdapter = new MyCustomAdapter(this,
-                R.layout.lista_equipo, equipoList);
-        listView = (ListView) findViewById(R.id.listView1);
-        // Assign adapter to ListView
-        listView.setAdapter(dataAdapter);
+                        e.printStackTrace();
+                    }
+                }
+            }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // When clicked, show a toast with the TextView text
-                Equipo equipos = (Equipo) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "Clicked on Row: " + equipos.getName(),
-                        Toast.LENGTH_LONG).show();
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
             }
         });
     }
@@ -74,8 +102,7 @@ public class EquipamientoActivity extends AppCompatActivity {
 
         private ArrayList<Equipo> equipoList;
 
-        public MyCustomAdapter(Context context, int textViewResourceId,
-                               ArrayList<Equipo> equipoList) {
+        public MyCustomAdapter(Context context, int textViewResourceId, ArrayList<Equipo> equipoList) {
             super(context, textViewResourceId, equipoList);
             this.equipoList = new ArrayList<Equipo>();
             this.equipoList.addAll(equipoList);
@@ -157,41 +184,6 @@ public class EquipamientoActivity extends AppCompatActivity {
         });
     }
 
-    /*private void descarga_equipo() {
-        equipo.clear();
-
-        final ProgressDialog progressDialog = new ProgressDialog(EquipamientoActivity.this);
-        progressDialog.setMessage("Cargando Datos...");
-        progressDialog.show();
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://itfactory.cl/smartTrekking/api/views/equipamientos", new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                if (statusCode == 200) {
-                    progressDialog.dismiss();
-                    try {
-                        JSONArray jsonArray = new JSONArray(new String(responseBody));
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            equipo.add(jsonArray.getJSONObject(i).getString("nombre_item"));
-                        }
-
-                        listView.setAdapter(new MyCustomAdapter(getApplicationContext()));
-
-                    } catch (JSONException e) {
-
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-            }
-        });
-
-    }*/
 
 
 

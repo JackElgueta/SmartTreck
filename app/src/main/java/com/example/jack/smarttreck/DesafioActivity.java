@@ -12,6 +12,7 @@ public class DesafioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_desafio);
+        setTitle("Desafio");
 
         final Button bUnirse = (Button) findViewById(R.id.bUnirse);
         final Button bCrear = (Button) findViewById(R.id.bCrear);

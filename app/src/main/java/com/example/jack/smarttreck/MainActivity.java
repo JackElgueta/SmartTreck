@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent nuevoform = new Intent(MainActivity.this,EquipamientoActivity.class);
+                nuevoform.putExtra("token", token);
+                nuevoform.putExtra("sessid", sessid);
+                nuevoform.putExtra("session_name", session_name);
                 startActivity(nuevoform);
             }
         });
