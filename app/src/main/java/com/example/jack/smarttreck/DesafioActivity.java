@@ -25,13 +25,13 @@ public class DesafioActivity extends AppCompatActivity {
             }
         });
 
-        bCrear.setOnClickListener(new View.OnClickListener() {
+        /*bCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent nuevoform = new Intent(DesafioActivity.this,Crear_DesafioActivity.class);
                 startActivity(nuevoform);
             }
-        });
+        });*/
     }
 }

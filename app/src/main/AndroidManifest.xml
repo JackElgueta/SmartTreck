@@ -47,7 +47,6 @@
             android:label="@string/title_activity_amigos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Desafios_disp" />
-        <activity android:name=".Crear_DesafioActivity"></activity>
     </application>
 
 </manifest>
