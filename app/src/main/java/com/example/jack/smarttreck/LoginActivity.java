@@ -74,6 +74,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    public TextView mGotoRegister;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -94,6 +95,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mGotoRegister = (TextView) findViewById(R.id.gotoregister);
+
+        mGotoRegister.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nuevoform = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(nuevoform);
             }
         });
 
@@ -330,7 +341,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             session_name = "";
             OkHttpClient client = new OkHttpClient();
 
-    /* Armamos la estructura de la peticion con los valores tomados del form */
+            /* Armamos la estructura de la peticion con los valores tomados del form */
             RequestBody loginFormBody = new FormBody.Builder()
                     .add("username", mEmail)
                     .add("password", mPassword)

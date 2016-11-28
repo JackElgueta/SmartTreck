@@ -67,88 +67,155 @@ public class PerfilActivity extends AppCompatActivity {
                     try {
                         JSONObject userJson = new JSONObject(new String(responseBody));
 
-                        fid_image = userJson.getJSONObject("user").getString("picture");
-                        uid_user = userJson.getJSONObject("user").getString("uid");
+                        Log.d("firstResponse", new String(responseBody));
+                        if(!"0".equals(userJson.getJSONObject("user").getString("picture"))){
+                            fid_image = userJson.getJSONObject("user").getString("picture");
 
-                        AsyncHttpClient client_image = new AsyncHttpClient();
-                        client_image.addHeader("X-CSRF-Token", token);
-                        client_image.addHeader("Cookie", session_name + "=" + sessid);
+                            uid_user = userJson.getJSONObject("user").getString("uid");
 
-                        client_image.get("http://itfactory.cl/smartTrekking/api/file/" + fid_image, new AsyncHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyImage) {
-                                try {
-                                    JSONObject imageFileJson = new JSONObject(new String(responseBodyImage));
-                                    url_image = imageFileJson.getString("uri_full");
-                                    Picasso.with(getApplicationContext()).load(url_image).into(ivProfilePicture);
+                            AsyncHttpClient client_image = new AsyncHttpClient();
+                            client_image.addHeader("X-CSRF-Token", token);
+                            client_image.addHeader("Cookie", session_name + "=" + sessid);
 
-                                    AsyncHttpClient client_user = new AsyncHttpClient();
-                                    client_user.addHeader("X-CSRF-Token", token);
-                                    client_user.addHeader("Cookie", session_name + "=" + sessid);
+                            client_image.get("http://itfactory.cl/smartTrekking/api/file/" + fid_image, new AsyncHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyImage) {
+                                    try {
+                                        JSONObject imageFileJson = new JSONObject(new String(responseBodyImage));
+                                        url_image = imageFileJson.getString("uri_full");
+                                        Picasso.with(getApplicationContext()).load(url_image).into(ivProfilePicture);
 
-                                    client_user.get("http://itfactory.cl/smartTrekking/api/user/" + uid_user, new AsyncHttpResponseHandler() {
-                                        @Override
-                                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyUser) {
+                                        AsyncHttpClient client_user = new AsyncHttpClient();
+                                        client_user.addHeader("X-CSRF-Token", token);
+                                        client_user.addHeader("Cookie", session_name + "=" + sessid);
+
+                                        client_user.get("http://itfactory.cl/smartTrekking/api/user/" + uid_user, new AsyncHttpResponseHandler() {
+                                            @Override
+                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyUser) {
 
 
-                                            try {
-                                                JSONObject userObject = new JSONObject(new String(responseBodyUser));
-                                                JSONObject nameObject = new JSONObject(new String(userObject.getJSONObject("field_nombre_completo").getJSONArray("und").getString(0)));
+                                                try {
+                                                    JSONObject userObject = new JSONObject(new String(responseBodyUser));
+                                                    JSONObject nameObject = new JSONObject(new String(userObject.getJSONObject("field_nombre_completo").getJSONArray("und").getString(0)));
 
-                                                nombreApellido = nameObject.getString("value");
-                                                tvNombreCompleto.setText(nombreApellido);
+                                                    nombreApellido = nameObject.getString("value");
+                                                    tvNombreCompleto.setText(nombreApellido);
 
-                                                AsyncHttpClient client_level = new AsyncHttpClient();
-                                                client_level.addHeader("X-CSRF-Token", token);
-                                                client_level.addHeader("Cookie", session_name + "=" + sessid);
-                                                RequestParams params = new RequestParams();
-                                                params.add("uid", uid_user);
+                                                    AsyncHttpClient client_level = new AsyncHttpClient();
+                                                    client_level.addHeader("X-CSRF-Token", token);
+                                                    client_level.addHeader("Cookie", session_name + "=" + sessid);
+                                                    RequestParams params = new RequestParams();
+                                                    params.add("uid", uid_user);
 
-                                                client_level.post("http://itfactory.cl/smartTrekking/getLevel", params, new AsyncHttpResponseHandler() {
-                                                    @Override
-                                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyLevel) {
-                                                        Log.d("responseLevel", new String(responseBodyLevel));
-                                                        try {
-                                                            JSONObject userLevelObject = new JSONObject(new String(responseBodyLevel));
-                                                            nivel = userLevelObject.getString("level");
-                                                            tvNivelUsuario.setText(nivel);
+                                                    client_level.post("http://itfactory.cl/smartTrekking/getLevel", params, new AsyncHttpResponseHandler() {
+                                                        @Override
+                                                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyLevel) {
+                                                            Log.d("responseLevel", new String(responseBodyLevel));
+                                                            try {
+                                                                JSONObject userLevelObject = new JSONObject(new String(responseBodyLevel));
+                                                                nivel = userLevelObject.getString("level");
+                                                                tvNivelUsuario.setText(nivel);
 
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+
                                                         }
 
-                                                    }
+                                                        @Override
+                                                        public void onFailure(int statusCode, Header[] headers, byte[] responseBodyLevel, Throwable error) {
 
-                                                    @Override
-                                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBodyLevel, Throwable error) {
-
-                                                    }
-                                                });
+                                                        }
+                                                    });
 
 
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(int statusCode, Header[] headers, byte[] responseBodyUser, Throwable error) {
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBodyUser, Throwable error) {
 
-                                        }
-                                    });
+                                            }
+                                        });
 
 
-                                    progressDialog.dismiss();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                        progressDialog.dismiss();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, byte[] responseBodyImage, Throwable error) {
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, byte[] responseBodyImage, Throwable error) {
 
-                            }
-                        });
+                                }
+                            });
+
+
+                        }
+                        else{
+
+                            uid_user = userJson.getJSONObject("user").getString("uid");
+                            Log.d("uid_user", uid_user);
+                            AsyncHttpClient client_user = new AsyncHttpClient();
+                            client_user.addHeader("X-CSRF-Token", token);
+                            client_user.addHeader("Cookie", session_name + "=" + sessid);
+                            client_user.get("http://itfactory.cl/smartTrekking/api/user/" + uid_user, new AsyncHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyUser) {
+
+
+                                    try {
+                                        JSONObject userObject = new JSONObject(new String(responseBodyUser));
+                                        Log.d("responseUser", new String(responseBodyUser));
+                                        JSONObject nameObject = new JSONObject(new String(userObject.getJSONObject("field_nombre_completo").getJSONArray("und").getString(0)));
+
+                                        nombreApellido = nameObject.getString("value");
+                                        tvNombreCompleto.setText(nombreApellido);
+
+                                        AsyncHttpClient client_level = new AsyncHttpClient();
+                                        client_level.addHeader("X-CSRF-Token", token);
+                                        client_level.addHeader("Cookie", session_name + "=" + sessid);
+                                        RequestParams params = new RequestParams();
+                                        params.add("uid", uid_user);
+
+                                        client_level.post("http://itfactory.cl/smartTrekking/getLevel", params, new AsyncHttpResponseHandler() {
+                                            @Override
+                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyLevel) {
+                                                Log.d("responseLevel", new String(responseBodyLevel));
+                                                try {
+                                                    JSONObject userLevelObject = new JSONObject(new String(responseBodyLevel));
+                                                    nivel = userLevelObject.getString("level");
+                                                    tvNivelUsuario.setText(nivel);
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBodyLevel, Throwable error) {
+
+                                            }
+                                        });
+
+                                        progressDialog.dismiss();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, byte[] responseBodyUser, Throwable error) {
+
+                                }
+                            });
+
+                        }
+
 
 
                     } catch (JSONException e) {

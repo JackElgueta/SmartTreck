@@ -13,7 +13,7 @@
 
     <!-- Login progress -->
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/register_progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/register_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -34,21 +34,51 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/welcome"
+                android:text="@string/register_welcome"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:fontFamily="sans-serif-light"
-                android:textSize="40dp"
                 android:textColor="@color/white"
+                android:textSize="30dp"
                 android:layout_marginBottom="40dp"
-                android:layout_marginTop="90dp"/>
+                android:layout_marginTop="30dp" />
 
-            <AutoCompleteTextView
+            <EditText
+                android:id="@+id/fullname"
+                android:theme="@style/MyEditTextTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_fullname"
+                android:textColorHint="@color/white"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/nick"
+                android:theme="@style/MyEditTextTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre de usuario"
+                android:textColorHint="@color/white"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:singleLine="true" />
+
+            <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/MyEditTextTheme"
-                android:hint="@string/prompt_email"
+                android:hint="@string/prompt_email_register"
                 android:inputType="textEmailAddress"
                 android:textColorHint="@color/white"
                 android:maxLines="1"
@@ -60,7 +90,22 @@
                 android:theme="@style/MyEditTextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="Contraseña"
+                android:textColorHint="@color/white"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/retype_password"
+                android:theme="@style/MyEditTextTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña nuevamente"
                 android:textColorHint="@color/white"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -71,14 +116,14 @@
                 android:singleLine="true" />
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/register_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/button_form"
                 android:textColor="@color/white"
-                android:text="Ingresar"
+                android:text="Registrar"
                 android:fontFamily="sans-serif-light"
                 android:textStyle="normal"
                 android:elevation="2dp" />
@@ -86,12 +131,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="5dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:text="@string/action_register"
-                android:id="@+id/gotoregister" />
+                android:text="@string/action_login"
+                />
 
 
         </LinearLayout>
