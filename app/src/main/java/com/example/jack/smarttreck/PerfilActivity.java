@@ -184,7 +184,7 @@ public class PerfilActivity extends AppCompatActivity {
                                         client_level.post("http://itfactory.cl/smartTrekking/getLevel", params, new AsyncHttpResponseHandler() {
                                             @Override
                                             public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyLevel) {
-                                                Log.d("responseLevel", new String(responseBodyLevel));
+
                                                 try {
                                                     JSONObject userLevelObject = new JSONObject(new String(responseBodyLevel));
                                                     nivel = userLevelObject.getString("level");

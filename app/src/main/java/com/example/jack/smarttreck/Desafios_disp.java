@@ -65,7 +65,7 @@ public class Desafios_disp extends AppCompatActivity {
                         JSONArray jsonArray = new JSONArray(new String(responseBody));
                         for (int i=0;i<jsonArray.length();i++) {
                             nombre.add(jsonArray.getJSONObject(i).getString("node_title"));
-                            Log.d("nombre_desafio", jsonArray.getJSONObject(i).getString("node_title"));
+
                             ruta.add(jsonArray.getJSONObject(i).getString("ruta"));
                             cantidadPersonas.add(jsonArray.getJSONObject(i).getString("cantidad de personas"));
                         }

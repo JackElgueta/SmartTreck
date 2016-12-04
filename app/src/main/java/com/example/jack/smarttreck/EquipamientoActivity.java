@@ -182,10 +182,7 @@ public class EquipamientoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v ;
                         Equipo equipos = (Equipo) cb.getTag();
-                        Toast.makeText(getApplicationContext(),
-                                "Clicked on Checkbox: " + cb.getText() +
-                                        " is " + cb.isChecked(),
-                                Toast.LENGTH_LONG).show();
+
                         equipos.setSelected(cb.isChecked());
                     }
                 });
@@ -213,7 +210,7 @@ public class EquipamientoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                StringBuffer responseText = new StringBuffer();
+                final StringBuffer responseText = new StringBuffer();
                 //responseText.append("The following were selected...\n");
 
                 AsyncHttpClient client_user = new AsyncHttpClient();
@@ -226,25 +223,44 @@ public class EquipamientoActivity extends AppCompatActivity {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         if(statusCode == 200){
                             try {
+                                String nids = new String("");
+                                String nids_final = new String("");
                                 JSONObject userJSON = new JSONObject(new String(responseBody));
                                 ArrayList<Equipo> countryList = dataAdapter.equipoList;
 
-                                int j=0;
+
                                 for(int i=0;i<countryList.size();i++){
                                     Equipo equipos = countryList.get(i);
                                     if(equipos.isSelected()){
-                                        JSONObject newEquiment = new JSONObject("{target_id:" + equipos.getCode() + "}");
-                                        userJSON.getJSONObject("field_equipamiento").getJSONArray("und").put(j, newEquiment);
-                                        j++;
+                                        nids = nids + equipos.getCode().toString() + ",";
                                     }
                                 }
 
+                                nids_final  = nids.substring(0,nids.length()-1);
+                                Log.d("nids", nids_final);
                                 AsyncHttpClient client_updateuser = new AsyncHttpClient();
                                 client_updateuser.addHeader("X-CSRF-Token", token);
                                 client_updateuser.addHeader("Cookie", session_name + "=" + sessid);
 
-                                RequestParams requestParams = new RequestParams();
-                                requestParams.put("data", new String(String.valueOf(userJSON)));
+                                RequestParams params = new RequestParams();
+                                params.add("uid", uid);
+                                params.add("nids", nids_final);
+
+                                client_updateuser.post("http://itfactory.cl/smartTrekking/updateEquipment", params, new AsyncHttpResponseHandler() {
+
+                                     @Override
+                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyLevel) {
+                                         responseText.append("Equipamiento guardado.");
+                                         finish();
+                                         startActivity(getIntent());
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBodyLevel, Throwable error) {
+
+                                    }
+                                });
 
 
 

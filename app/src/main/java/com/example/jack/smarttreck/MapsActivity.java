@@ -85,7 +85,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         client_level.post("http://itfactory.cl/smartTrekking/getLevel", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBodyLevel) {
-                Log.d("responseLevel", new String(responseBodyLevel));
+
                 try {
                     JSONObject userLevelObject = new JSONObject(new String(responseBodyLevel));
                     nivel = userLevelObject.getString("level");
@@ -99,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                             if(statusCode==200){
-                                Log.d("response", new String(responseBody));
+
                                 progressDialog.dismiss();
                                 try {
                                     JSONArray jsonArray = new JSONArray(new String(responseBody));
