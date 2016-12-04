@@ -335,10 +335,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         protected Boolean doInBackground(Void... params) {
 
             /* Creamos el objeto cliente */
-            String token, sessid, session_name;
+            String token, sessid, session_name, uid;
             token = "";
             sessid = "";
             session_name = "";
+            uid = "";
             OkHttpClient client = new OkHttpClient();
 
             /* Armamos la estructura de la peticion con los valores tomados del form */
@@ -358,15 +359,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 if(response.isSuccessful()){
                     String responseContent = response.body().string();
 
+
                     try {
                         JSONObject loginObject = new JSONObject(responseContent);
 
                         token = loginObject.getString("token");
                         sessid = loginObject.getString("sessid");
                         session_name = loginObject.getString("session_name");
-                        Log.d("token_from_login", token);
-                        Log.d("sessid_from_login", sessid);
-                        Log.d("session_name_from_login", session_name);
+                        uid = loginObject.getJSONObject("user").getString("uid");
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -377,6 +378,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     goToMain.putExtra("token", token);
                     goToMain.putExtra("session_name", session_name);
                     goToMain.putExtra("sessid", sessid);
+                    goToMain.putExtra("uid", uid);
 
 
                     startActivity(goToMain);

@@ -20,16 +20,18 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
 public class EquipamientoActivity extends AppCompatActivity {
-    String token, sessid, session_name, fid_image, url_image, uid_user;
+    String token, sessid, session_name, fid_image, url_image, uid_user, uid;
     private ListView listView;
     ArrayList equipo = new ArrayList();
 
@@ -46,6 +48,7 @@ public class EquipamientoActivity extends AppCompatActivity {
             token = extras.getString("token");
             sessid = extras.getString("sessid");
             session_name = extras.getString("session_name");
+            uid = extras.getString("uid");
         }
 
         setContentView(R.layout.activity_equipamiento);
@@ -58,44 +61,88 @@ public class EquipamientoActivity extends AppCompatActivity {
 
     private void displayListView() {
         final ArrayList<Equipo> equipoList = new ArrayList<Equipo>();
-
+        final JSONObject[] equipamientoUser = new JSONObject[1];
         final ProgressDialog progressDialog = new ProgressDialog(EquipamientoActivity.this);
         progressDialog.setMessage("Cargando Equipamiento...");
         progressDialog.show();
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("X-CSRF-Token", token);
-        client.addHeader("Cookie", session_name + "=" + sessid);
 
-        client.get("http://itfactory.cl/smartTrekking/api/views/equipamientos", new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                if(statusCode==200){
-                    progressDialog.dismiss();
-                    try {
-                        JSONArray jsonArray = new JSONArray(new String(responseBody));
-                        for (int i=0;i<jsonArray.length();i++) {
-                            Equipo equipo = new Equipo(jsonArray.getJSONObject(i).getString("nid"), jsonArray.getJSONObject(i).getString("nombre_item"), false);
-                            equipoList.add(equipo);
+
+        AsyncHttpClient client_user = new AsyncHttpClient();
+        client_user.addHeader("X-CSRF-Token", token);
+        client_user.addHeader("Cookie", session_name + "=" + sessid);
+
+        client_user.get("http://itfactory.cl/smartTrekking/api/user/" + uid, new AsyncHttpResponseHandler() {
+
+
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        if (statusCode == 200) {
+
+                            try {
+                                JSONObject userJson = new JSONObject(new String(responseBody));
+                                equipamientoUser[0] = userJson.getJSONObject("field_equipamiento");
+                                final JSONArray equipamientoUsuario = equipamientoUser[0].getJSONArray("und");
+
+
+                                AsyncHttpClient client = new AsyncHttpClient();
+                                client.addHeader("X-CSRF-Token", token);
+                                client.addHeader("Cookie", session_name + "=" + sessid);
+
+                                client.get("http://itfactory.cl/smartTrekking/api/views/equipamientos", new AsyncHttpResponseHandler() {
+
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                        if(statusCode==200){
+                                            progressDialog.dismiss();
+                                            try {
+                                                JSONArray jsonArray = new JSONArray(new String(responseBody));
+                                                for (int i=0;i<jsonArray.length();i++) {
+                                                    boolean loTiene = false;
+                                                    for(int j=0; j < equipamientoUsuario.length(); j++) {
+                                                        if(jsonArray.getJSONObject(i).getString("nid").equals(equipamientoUsuario.getJSONObject(j).getString("target_id"))){
+                                                            loTiene = true;
+
+                                                        }
+
+                                                    }
+
+                                                    Equipo equipo = new Equipo(jsonArray.getJSONObject(i).getString("nid"), jsonArray.getJSONObject(i).getString("nombre_item"), loTiene);
+                                                    equipoList.add(equipo);
+                                                }
+                                                //create an ArrayAdaptar from the String Array
+                                                dataAdapter = new MyCustomAdapter(EquipamientoActivity.this, R.layout.lista_equipo, equipoList);
+                                                listView = (ListView) findViewById(R.id.listView1);
+                                                // Assign adapter to ListView
+                                                listView.setAdapter(dataAdapter);
+
+
+                                            }catch (JSONException e){
+
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                                    }
+                                });
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        //create an ArrayAdaptar from the String Array
-                        dataAdapter = new MyCustomAdapter(EquipamientoActivity.this, R.layout.lista_equipo, equipoList);
-                        listView = (ListView) findViewById(R.id.listView1);
-                        // Assign adapter to ListView
-                        listView.setAdapter(dataAdapter);
 
-
-                    }catch (JSONException e){
-
-                        e.printStackTrace();
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-            }
-        });
+                    }
+                });
+
+
     }
 
     private class MyCustomAdapter extends ArrayAdapter<Equipo> {
@@ -167,15 +214,53 @@ public class EquipamientoActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 StringBuffer responseText = new StringBuffer();
-                responseText.append("The following were selected...\n");
+                //responseText.append("The following were selected...\n");
 
-                ArrayList<Equipo> countryList = dataAdapter.equipoList;
-                for(int i=0;i<countryList.size();i++){
-                    Equipo equipos = countryList.get(i);
-                    if(equipos.isSelected()){
-                        responseText.append("\n" + equipos.getName());
+                AsyncHttpClient client_user = new AsyncHttpClient();
+                client_user.addHeader("X-CSRF-Token", token);
+                client_user.addHeader("Cookie", session_name + "=" + sessid);
+
+                client_user.get("http://itfactory.cl/smartTrekking/api/user/" + uid, new AsyncHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        if(statusCode == 200){
+                            try {
+                                JSONObject userJSON = new JSONObject(new String(responseBody));
+                                ArrayList<Equipo> countryList = dataAdapter.equipoList;
+
+                                int j=0;
+                                for(int i=0;i<countryList.size();i++){
+                                    Equipo equipos = countryList.get(i);
+                                    if(equipos.isSelected()){
+                                        JSONObject newEquiment = new JSONObject("{target_id:" + equipos.getCode() + "}");
+                                        userJSON.getJSONObject("field_equipamiento").getJSONArray("und").put(j, newEquiment);
+                                        j++;
+                                    }
+                                }
+
+                                AsyncHttpClient client_updateuser = new AsyncHttpClient();
+                                client_updateuser.addHeader("X-CSRF-Token", token);
+                                client_updateuser.addHeader("Cookie", session_name + "=" + sessid);
+
+                                RequestParams requestParams = new RequestParams();
+                                requestParams.put("data", new String(String.valueOf(userJSON)));
+
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+
+
 
                 Toast.makeText(getApplicationContext(),
                         responseText, Toast.LENGTH_LONG).show();

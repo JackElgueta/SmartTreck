@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    String token, sessid, session_name;
+    String token, sessid, session_name, uid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -21,20 +22,25 @@ public class MainActivity extends AppCompatActivity {
             token = extras.getString("token");
             sessid = extras.getString("sessid");
             session_name = extras.getString("session_name");
+            uid = extras.getString("uid");
         }
 
 
-        final ImageButton ibMapa = (ImageButton) findViewById(R.id.ibMapa);
-        final ImageButton ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
-        final ImageButton ibDesafio = (ImageButton) findViewById(R.id.ibDesafio);
-        final ImageButton ibEquipamiento = (ImageButton) findViewById(R.id.ibEquipamiento);
-        final ImageButton ibAmigos = (ImageButton) findViewById(R.id.ibAmigos);
+        final Button ibMapa = (Button) findViewById(R.id.ibMapa);
+        final Button ibPerfil = (Button) findViewById(R.id.ibPerfil);
+        final Button ibDesafio = (Button) findViewById(R.id.ibDesafio);
+        final Button ibEquipamiento = (Button) findViewById(R.id.ibEquipamiento);
+
 
         ibMapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                     Intent nuevoform = new Intent(MainActivity.this,MapsActivity.class);
+                    nuevoform.putExtra("token", token);
+                    nuevoform.putExtra("sessid", sessid);
+                    nuevoform.putExtra("session_name", session_name);
+                    nuevoform.putExtra("uid", uid);
                     startActivity(nuevoform);
             }
         });
@@ -68,18 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 nuevoform.putExtra("token", token);
                 nuevoform.putExtra("sessid", sessid);
                 nuevoform.putExtra("session_name", session_name);
+                nuevoform.putExtra("uid", uid);
                 startActivity(nuevoform);
             }
         });
 
-        ibAmigos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent nuevoform = new Intent(MainActivity.this,AmigosActivity.class);
-                startActivity(nuevoform);
-            }
-        });
 
     }
 }
