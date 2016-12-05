@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -32,6 +33,7 @@ import cz.msebera.android.httpclient.Header;
 public class DesafiosDialogFragment extends DialogFragment {
     String token, sessid, session_name, fid_image, url_image, uid_user, uid;
     MyCustomAdapter dataAdapter = null;
+    private Spinner ruta1, ruta2, ruta3, ruta4;
     public DesafiosDialogFragment() {
 
     }
@@ -108,11 +110,10 @@ public class DesafiosDialogFragment extends DialogFragment {
                                                 Rutas rutas = new Rutas(jsonArray.getJSONObject(i).getString("node_title"), jsonArray.getJSONObject(i).getString("lat"), jsonArray.getJSONObject(i).getString("lon"), jsonArray.getJSONObject(i).getString("distancia"), jsonArray.getJSONObject(i).getString("tiempo_estimado"));
                                                 rutaList.add(rutas);
                                             }
-                                            //create an ArrayAdaptar from the String Array
-                                            dataAdapter = new MyCustomAdapter(DesafiosDialogFragment.this, R.layout.lista_equipo, rutaList);
-                                            listView = (ListView) findViewById(R.id.listView1);
-                                            // Assign adapter to ListView
-                                            listView.setAdapter(dataAdapter);
+
+
+
+                                            ruta1.setAdapter(new ArrayAdapter<String>(this,R.layout.fragment_desafios_dialog,rutaList));
 
 
                                         } catch (JSONException e) {
@@ -147,7 +148,7 @@ public class DesafiosDialogFragment extends DialogFragment {
 
     }
 
-    private class MyCustomAdapter extends ArrayAdapter<Equipo> {
+    private class MyCustomAdapter extends ArrayAdapter<Rutas> {
 
         private ArrayList<Rutas> rutaList;
 
