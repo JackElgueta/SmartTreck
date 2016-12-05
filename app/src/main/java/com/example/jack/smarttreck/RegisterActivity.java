@@ -148,7 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             OkHttpClient client = new OkHttpClient();
 
-            String jsonString = "{\"name\": \"" +mNickname+ "\" , \"pass\": \"" +mPassword+ "\", \"mail\": \"" +mEmail+ "\", \"field_nombre_completo\": { \"und\": [{ \"value\": \"" +mFullName+ "\"}]}}";
+            String jsonString = "{\"name\": \"" + mNickname + "\" , \"pass\": \"" + mPassword + "\", \"mail\": \"" +mEmail+ "\", \"field_nombre_completo\": { \"und\": [{ \"value\": \"" +mFullName+ "\"}]}}";
 
             RequestBody body = RequestBody.create(JSON, jsonString);
 

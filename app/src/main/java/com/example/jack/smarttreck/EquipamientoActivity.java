@@ -79,54 +79,94 @@ public class EquipamientoActivity extends AppCompatActivity {
 
                             try {
                                 JSONObject userJson = new JSONObject(new String(responseBody));
-                                equipamientoUser[0] = userJson.getJSONObject("field_equipamiento");
-                                final JSONArray equipamientoUsuario = equipamientoUser[0].getJSONArray("und");
+                                if (userJson.get("field_equipamiento").toString().equals("[]")) {
 
+                                    AsyncHttpClient client = new AsyncHttpClient();
+                                    client.addHeader("X-CSRF-Token", token);
+                                    client.addHeader("Cookie", session_name + "=" + sessid);
 
-                                AsyncHttpClient client = new AsyncHttpClient();
-                                client.addHeader("X-CSRF-Token", token);
-                                client.addHeader("Cookie", session_name + "=" + sessid);
+                                    client.get("http://itfactory.cl/smartTrekking/api/views/equipamientos", new AsyncHttpResponseHandler() {
 
-                                client.get("http://itfactory.cl/smartTrekking/api/views/equipamientos", new AsyncHttpResponseHandler() {
-
-                                    @Override
-                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                        if(statusCode==200){
-                                            progressDialog.dismiss();
-                                            try {
-                                                JSONArray jsonArray = new JSONArray(new String(responseBody));
-                                                for (int i=0;i<jsonArray.length();i++) {
-                                                    boolean loTiene = false;
-                                                    for(int j=0; j < equipamientoUsuario.length(); j++) {
-                                                        if(jsonArray.getJSONObject(i).getString("nid").equals(equipamientoUsuario.getJSONObject(j).getString("target_id"))){
-                                                            loTiene = true;
-
-                                                        }
-
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                            if (statusCode == 200) {
+                                                progressDialog.dismiss();
+                                                try {
+                                                    JSONArray jsonArray = new JSONArray(new String(responseBody));
+                                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                                        Equipo equipo = new Equipo(jsonArray.getJSONObject(i).getString("nid"), jsonArray.getJSONObject(i).getString("nombre_item"), false);
+                                                        equipoList.add(equipo);
                                                     }
+                                                    //create an ArrayAdaptar from the String Array
+                                                    dataAdapter = new MyCustomAdapter(EquipamientoActivity.this, R.layout.lista_equipo, equipoList);
+                                                    listView = (ListView) findViewById(R.id.listView1);
+                                                    // Assign adapter to ListView
+                                                    listView.setAdapter(dataAdapter);
 
-                                                    Equipo equipo = new Equipo(jsonArray.getJSONObject(i).getString("nid"), jsonArray.getJSONObject(i).getString("nombre_item"), loTiene);
-                                                    equipoList.add(equipo);
+
+                                                } catch (JSONException e) {
+
+                                                    e.printStackTrace();
                                                 }
-                                                //create an ArrayAdaptar from the String Array
-                                                dataAdapter = new MyCustomAdapter(EquipamientoActivity.this, R.layout.lista_equipo, equipoList);
-                                                listView = (ListView) findViewById(R.id.listView1);
-                                                // Assign adapter to ListView
-                                                listView.setAdapter(dataAdapter);
-
-
-                                            }catch (JSONException e){
-
-                                                e.printStackTrace();
                                             }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-                                    }
-                                });
+                                        }
+                                    });
+
+                                } else{
+
+                                    equipamientoUser[0] = userJson.getJSONObject("field_equipamiento");
+                                    Log.d("length equipment", new String(String.valueOf(equipamientoUser[0].length())));
+                                    final JSONArray equipamientoUsuario = equipamientoUser[0].getJSONArray("und");
+
+
+                                    AsyncHttpClient client = new AsyncHttpClient();
+                                    client.addHeader("X-CSRF-Token", token);
+                                    client.addHeader("Cookie", session_name + "=" + sessid);
+
+                                    client.get("http://itfactory.cl/smartTrekking/api/views/equipamientos", new AsyncHttpResponseHandler() {
+
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                            if (statusCode == 200) {
+                                                progressDialog.dismiss();
+                                                try {
+                                                    JSONArray jsonArray = new JSONArray(new String(responseBody));
+                                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                                        boolean loTiene = false;
+                                                        for (int j = 0; j < equipamientoUsuario.length(); j++) {
+                                                            if (jsonArray.getJSONObject(i).getString("nid").equals(equipamientoUsuario.getJSONObject(j).getString("target_id"))) {
+                                                                loTiene = true;
+                                                            }
+                                                        }
+
+                                                        Equipo equipo = new Equipo(jsonArray.getJSONObject(i).getString("nid"), jsonArray.getJSONObject(i).getString("nombre_item"), loTiene);
+                                                        equipoList.add(equipo);
+                                                    }
+                                                    //create an ArrayAdaptar from the String Array
+                                                    dataAdapter = new MyCustomAdapter(EquipamientoActivity.this, R.layout.lista_equipo, equipoList);
+                                                    listView = (ListView) findViewById(R.id.listView1);
+                                                    // Assign adapter to ListView
+                                                    listView.setAdapter(dataAdapter);
+
+
+                                                } catch (JSONException e) {
+
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                                        }
+                                    });
+                                }
 
 
                             } catch (JSONException e) {
