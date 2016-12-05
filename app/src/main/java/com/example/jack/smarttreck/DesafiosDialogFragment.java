@@ -115,18 +115,7 @@ public class DesafiosDialogFragment extends DialogFragment {
 
 
                                             //dataAdapter = new ArrayAdapter<String>(this, R.layout.fragment_desafios_dialog,rutaList);
-                                            ruta1.setAdapter(new ArrayAdapter<String>(this,R.layout.fragment_desafios_dialog,rutaList);
-                                            ruta1.setOnItemClickListener(new AdapterView.OnItemSelectedListener() {
-                                                @Override
-                                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                    Toast.makeText(parent.getContext(),(String) parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
-                                                }
 
-                                                @Override
-                                                public void onNothingSelected(AdapterView<?> parent) {
-
-                                                }
-                                            });
 
 
                                         } catch (JSONException e) {
@@ -158,6 +147,63 @@ public class DesafiosDialogFragment extends DialogFragment {
             }
         });
 
+
+    }
+    private class MyCustomAdapter extends ArrayAdapter<Rutas> {
+
+        private ArrayList<Rutas> rutaList;
+
+        public MyCustomAdapter(Context context, int textViewResourceId, ArrayList<Rutas> rutaList) {
+            super(context, textViewResourceId, rutaList);
+            this.rutaList = new ArrayList<Rutas>();
+            this.rutaList.addAll(rutaList);
+        }
+
+
+
+        private class ViewHolder {
+            TextView nombreruta;
+            CheckBox name;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder holder = null;
+            Log.v("ConvertView", String.valueOf(position));
+
+            if (convertView == null) {
+                LayoutInflater vi = (LayoutInflater)getSystemService(
+                        Context.LAYOUT_INFLATER_SERVICE);
+                convertView = vi.inflate(R.layout.lista_equipo, null);
+
+                holder = new ViewHolder();
+                holder.code = (TextView) convertView.findViewById(R.id.code);
+                holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
+                convertView.setTag(holder);
+
+                holder.name.setOnClickListener( new View.OnClickListener() {
+                    public void onClick(View v) {
+                        CheckBox cb = (CheckBox) v ;
+                        Equipo equipos = (Equipo) cb.getTag();
+
+                        equipos.setSelected(cb.isChecked());
+                    }
+                });
+            }
+            else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            Equipo equipos = equipoList.get(position);
+            holder.code.setText(" (" +  equipos.getCode() + ")");
+            holder.name.setText(equipos.getName());
+            holder.name.setChecked(equipos.isSelected());
+            holder.name.setTag(equipos);
+
+            return convertView;
+
+        }
 
     }
 
