@@ -2,6 +2,7 @@ package com.example.jack.smarttreck;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +46,7 @@ public class Desafios_disp extends AppCompatActivity {
 
 
 
+
     }
 
     private void descargar_desafios() {
@@ -72,6 +75,8 @@ public class Desafios_disp extends AppCompatActivity {
 
 
                         listView.setAdapter(new ImagenAdapter(getApplicationContext()));
+
+
 
                         }catch (JSONException e){
 
@@ -132,6 +137,8 @@ public class Desafios_disp extends AppCompatActivity {
             tvRuta.setText(ruta.get(position).toString());
             tvCantidadPersonas.setText(cantidadPersonas.get(position).toString());
             tvNombre.setText(nombre.get(position).toString());
+
+
 
             return viewGroup;
         }
